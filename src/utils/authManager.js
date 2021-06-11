@@ -18,11 +18,10 @@ export const verify = async (password, hashed) => {
 
 export const authenticate = (id) => {
 	if (id) {
-		const token = jwt.sign(
-			{ id },
+		const token = jwt.sign({id},
 			process.env.TOKEN_SECRET,
-			{ expiresIn: process.env.TOKEN_EXPIRY },
-		);
+			{ expiresIn: process.env.TOKEN_EXPIRY });
+		console.log(token);
 		return token;
 	}
 
@@ -46,16 +45,6 @@ export const validate = (token) => {
 	}
 };
 
-export const authResponse = (res, payload) => {
-	res.cookie('token', payload.token, {
-		maxAge: process.env.COOKIE_EXPIRY,
-		httpOnly: true,
-		signed: true,
-		sameSite: 'strict',
-		secure: true,
-	}).status(200).json(payload.user);
-};
-
 export const authBadResponse = (res, error) => {
-	res.status(error.status).json(error);
+	res.status(400).json(error);
 };

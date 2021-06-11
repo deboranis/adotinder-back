@@ -4,6 +4,7 @@ import AppError from '../errors/AppError';
 export const validateSignUp = (request, response, next) => {
 	const validation = signUpSchema.validate(request.body);
 	if (validation.error) {
+		console.log('REACHED VALIDATION ERROR')
 		const error = validation.error.details.reduce((acc, err) => {
 			acc[err.context.label] = err.message;
 			return acc;

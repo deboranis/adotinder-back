@@ -12,6 +12,8 @@ const petSchema = new Schema({
 	vacinas: { type: Boolean, required: true },
 	fiv: { type: Boolean, required: isCat },
 	felv: { type: Boolean, required: isCat },
+	protetor: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+	// aqui dizendo que o protetor vai ter como tipo um objectId que por sua vez tem como referência o user
 });
 
 const Pet = model('Pet', petSchema);

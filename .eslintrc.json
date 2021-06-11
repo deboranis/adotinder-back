@@ -13,6 +13,8 @@
     "rules": {
         "linebreak-style": ["error", "windows"],
         "indent": [2, "tab"],
-        "no-tabs": "off"
+        "no-tabs": "off",
+        "no-shadow": "off",
+        "max-len": "off"
     }
 }
