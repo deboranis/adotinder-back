@@ -11,7 +11,7 @@ router.post('/signup', validateSignUp, async (request, response) => {
 		const { body } = request;
 		console.log(body)
 		await createUser(body);
-		response.status(200).json({ message: 'Registered successfully' });
+		response.status(201).json({ message: 'Registered successfully' });
 	} catch (error) {
 		response.status(401).json(error);
 	}
