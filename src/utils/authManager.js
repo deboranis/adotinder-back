@@ -21,7 +21,6 @@ export const authenticate = (id) => {
 		const token = jwt.sign({id},
 			process.env.TOKEN_SECRET,
 			{ expiresIn: process.env.TOKEN_EXPIRY });
-		console.log(token);
 		return token;
 	}
 

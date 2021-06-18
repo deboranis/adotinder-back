@@ -10,14 +10,8 @@ router.post('/signup', validateSignUp, async (request, response) => {
 	try {
 		const { body } = request;
 		console.log(body)
-		const data = await createUser(body);
-		response.cookie('token', data.token, {
-			expire: process.env.COOKIE_EXPIRY + Date.now(),
-			httpOnly: true,
-			signed: true,
-			sameSite: 'strict',
-			secure: true,
-		}).status(200).json({ usuário: data.nome, email: data.email, tipo: data.tipo });
+		await createUser(body);
+		response.status(200).json({ message: 'Registered successfully' });
 	} catch (error) {
 		response.status(401).json(error);
 	}
@@ -35,7 +29,7 @@ router.post('/login', validateLogin, async (request, response) => {
 			secure: true,
 		}).status(200).json({ usuário: data.nome, email: data.email });
 	} catch (error) {
-		authBadResponse(response, error);
+		response.status(401).json(error);
 	}
 });
 
@@ -49,13 +43,14 @@ router.get('/token', async (request, response) => {
 		const { token } = request.signedCookies;
 		const user = await verifyToken(token);
 		response.cookie('token', user.token, {
-			maxAge: process.env.COOKIE_EXPIRY,
+			maxAge: 604800000,
 			httpOnly: true,
 			signed: true,
 			sameSite: 'strict',
 			secure: true,
 		}).status(200).json(user.data);
 	} catch (error) {
+		console.log(error)
 		response.clearCookie('token').status(error.status).json(error);
 	}
 });

@@ -13,13 +13,6 @@ export const createUser = async (body) => {
 	try {
 		const newUser = new User({ ...body, senha: await encrypt(body.senha) });
 		await newUser.save();
-		return {
-			id: newUser._id,
-			token: authenticate(newUser._id),
-			nome: newUser.nome,
-			email: newUser.email,
-			tipo: newUser.tipo,
-		};
 	} catch (error) {
 		const keyValue = Object.keys(error.keyValue);
 		throw new AppError({
@@ -55,12 +48,14 @@ export const verifyToken = async (token) => {
 	try {
 		const validatedToken = validate(token);
 		const user = await User.findById(validatedToken.id, ['email', 'nome', '_id', 'tipo']);
-		const token = authenticate(user._id);
+		const newToken = authenticate(user._id);
 		return {
-			token,
-			email: user.email,
-			tipo: user.tipo,
-			nome: user.nome,
+			token: newToken,
+			data: {
+				email: user.email,
+				tipo: user.tipo,
+				nome: user.nome,
+			}
 		};
 	} catch (error) {
 		throw new AppError(error);
