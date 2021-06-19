@@ -19,21 +19,19 @@ router.get('/edit', async (request, response) => {
 router.post('/edit', async (request, response) => {
   try {
     const { body } = request;
-    const { token } = request.signedCookies;
-    const editedUser = editUser(token.id, body);
+    const { id } = validate(request.signedCookies.token);
+    const editedUser = editUser(id, body);
     response.status(200).json(editedUser);
   } catch (error) {
     response.status(error.status).json(new AppError(error));
   }
 });
 
-router.get('/delete', async (request, response) => {
+router.delete('/delete', async (request, response) => {
   try {
-    const { token } = request.signedCookies;
-    const { id } = validate(token) //como essa função é síncrona, vai retornar um objeto que por sua vez tem prop id
-    console.log(id)
+    const { id } = validate(request.signedCookies.token); //como essa função é síncrona, vai retornar um objeto que por sua vez tem prop id
     await deleteUser(id);
-    response.clearCookie('token');
+    response.clearCookie('token').status(200).json({ message: 'Usuário removido com sucesso.' });
   } catch (error) {
     response.status(error.status).json(new AppError(error));
   }

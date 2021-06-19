@@ -68,7 +68,7 @@ export const verifyToken = async (token) => {
 
 export const getUser = async (id) => {
 	try {
-		const user = await User.findById(id, ['email', 'nome', 'telefone', 'cpf', 'cnpj', 'nomeOng']);
+		const user = await User.findById(id, ['email', 'nome', 'telefone', 'cpf', 'cnpj', 'nomeOng', 'tipo']);
 		return user;
 	} catch (error) {
 		throw new AppError(error);

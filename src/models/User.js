@@ -31,8 +31,8 @@ const userSchemaValidation = {
 	cpf: Joi.string().required().min(11).max(11),
 	telefone: Joi.string().required().min(10).max(11),
 	tipo: Joi.string().required().valid('protetor', 'adotante'),
-	nomeOng: Joi.string(),
-	cnpj: Joi.string().min(14).max(14),
+	nomeOng: Joi.string().when('tipo', { is: 'protetor', then: Joi.required() }),
+	cnpj: Joi.string().min(14).max(14).when('tipo', { is: 'protetor', then: Joi.required() }),
 };
 
 export const loginSchema = Joi
