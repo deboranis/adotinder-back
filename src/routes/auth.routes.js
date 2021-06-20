@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { validateSignUp, validateLogin } from '../middlewares/authValidation';
-import { authBadResponse } from '../utils/authManager';
+import AppError from '../errors/AppError';
 import routeProtection from '../middlewares/routeProtection';
 import { createUser, login, verifyToken } from '../controller/user.controller';
 
@@ -26,9 +26,9 @@ router.post('/login', validateLogin, async (request, response) => {
 			signed: true,
 			sameSite: 'strict',
 			secure: true,
-		}).status(200).json({ usuário: data.nome, email: data.email });
+		}).status(200).json({ nome: data.nome, email: data.email, tipo: data.tipo });
 	} catch (error) {
-		response.status(401).json(error);
+		response.status(401).json(new AppError(error));
 	}
 });
 

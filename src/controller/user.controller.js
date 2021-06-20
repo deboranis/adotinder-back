@@ -36,8 +36,6 @@ export const login = async (body) => {
 					email: user.email,
 					tipo: user.tipo,
 				};
-
-				//RESOLVER PAU DO LOGIN AUTENTICANDO
 			}
 		}
 		throw new AppError({
@@ -45,7 +43,7 @@ export const login = async (body) => {
 			type: 'No-Credentials',
 			status: 401,
 		});
-	} catch (error) { return error; }
+	} catch (error) { throw new AppError(error) }
 };
 
 export const verifyToken = async (token) => {
