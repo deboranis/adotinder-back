@@ -43,7 +43,3 @@ export const validate = (token) => {
 		});
 	}
 };
-
-export const authBadResponse = (res, error) => {
-	res.status(400).json(error);
-};

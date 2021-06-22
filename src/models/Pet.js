@@ -6,9 +6,9 @@ function isCat() {
 
 const petSchema = new Schema({
 	nome: { type: String, required: true },
-	especie: { type: String, required: true, enum: ['gato', 'cachorro'] },
+	especie: { type: Boolean, required: true },
 	descricao: { type: String, required: true },
-	idade: { type: Number, required: true }, //
+	idade: { type: String, required: true }, //
 	sexo: { type: Boolean, required: true },
 	peso: { type: Number, required: true },
 	castrado: { type: Boolean, required: true },
