@@ -19,6 +19,7 @@ const petSchema = new Schema({
 	fiv: { type: Boolean, required: isCat }, //
 	felv: { type: Boolean, required: isCat }, //
 	protetor: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+	foto: { type: String }
 	// aqui dizendo que o protetor vai ter como tipo um objectId que por sua vez tem como referência o user
 });
 
