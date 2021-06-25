@@ -40,7 +40,11 @@ export const getUserPets = async (user) => {
 
 export const getQuizPets = async (queries) => {
 	try {
-		const quizResult = await Pet.find(quizMapper(queries));
+		const quizResult = await Pet.find(quizMapper(queries))
+			.populate({
+				path: 'protetor',
+				select: { nome: 1, telefone: 1, _id: 0 },
+			});
 		return quizResult;
 	} catch (error) {
 		throw new AppError({
