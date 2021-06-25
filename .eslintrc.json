@@ -15,6 +15,7 @@
         "indent": [2, "tab"],
         "no-tabs": "off",
         "no-shadow": "off",
-        "max-len": "off"
+        "max-len": "off",
+        "no-console": "off"
     }
 }
