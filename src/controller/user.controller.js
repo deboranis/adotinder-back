@@ -8,7 +8,10 @@ import {
 	validate,
 } from '../utils/authManager';
 
-// eslint-disable-next-line import/prefer-default-export
+/**
+ * @param {object} body Um objeto contendo os dados do usuário a ser criado.
+ * Essa função não retorna dados, apenas salva o usuário na Db.
+ */
 export const createUser = async (body) => {
 	try {
 		const newUser = new User({ ...body, senha: await encrypt(body.senha) });
@@ -23,10 +26,14 @@ export const createUser = async (body) => {
 	}
 };
 
+/**
+ * @param {object} body Um objeto contendo o email e senha do usuário que deseja se autenticar
+ * @returns Um objeto contendo o JWT e os dados de usuário a serem enviados para o front
+ */
 export const login = async (body) => {
 	try {
 		const user = await User.findOne({ email: body.email }, ['nome', 'email', 'tipo', '_id', 'senha']);
-		if(user) {
+		if (user) {
 			const validation = await verify(body.senha, user.senha);
 			if (validation) {
 				const token = authenticate(user._id);
@@ -43,9 +50,13 @@ export const login = async (body) => {
 			type: 'No-Credentials',
 			status: 401,
 		});
-	} catch (error) { throw new AppError(error) }
+	} catch (error) { throw new AppError(error); }
 };
 
+/**
+ * @param {string} token O JWT enviado pelo usuário para renovação da sessão
+ * @returns Um novo JWT com os dados do usuário a serem enviados para o front
+ */
 export const verifyToken = async (token) => {
 	try {
 		const validatedToken = validate(token);
@@ -57,13 +68,17 @@ export const verifyToken = async (token) => {
 				email: user.email,
 				tipo: user.tipo,
 				nome: user.nome,
-			}
+			},
 		};
 	} catch (error) {
 		throw new AppError(error);
 	}
 };
 
+/**
+ * @param {string} id O ID do usuário na Db
+ * @returns {object} Um objeto contendo os dados do usuário
+ */
 export const getUser = async (id) => {
 	try {
 		const user = await User.findById(id, ['email', 'nome', 'telefone', 'cpf', 'cnpj', 'nomeOng', 'tipo']);
@@ -73,13 +88,18 @@ export const getUser = async (id) => {
 	}
 };
 
+/**
+ * @param {string} id O ID do usuário na Db
+ * @param {object} body Um objeto contendo os dados a serem atualizados
+ * @returns {object} Os dados atualizados do usuário
+ */
 export const editUser = async (id, body) => {
 	try {
-		const editedUser = await User.findByIdAndUpdate(id, body, { new: true, useFindAndModify: false }); //new: true retorna pós atualização
+		const editedUser = await User.findByIdAndUpdate(id, body, { new: true, useFindAndModify: false }); // new: true retorna pós atualização
 		return editedUser;
 	} catch (error) {
 		const keyValue = Object.keys(error.keyValue);
-		AppError({
+		throw new AppError({
 			message: keyValue.length > 0 ? `${keyValue} already exists` : 'Não deu pra editar agora, foi mal :(',
 			type: keyValue.length > 0 ? `User-Edit-${keyValue}` : 'User-Edit',
 			status: keyValue.length > 0 ? 400 : 500,
@@ -87,6 +107,10 @@ export const editUser = async (id, body) => {
 	}
 };
 
+/**
+ * @param {string} id O ID do usuário na Db.
+ * Essa função apenas deleta o usuário da Db e não retorna dados
+ */
 export const deleteUser = async (id) => {
 	try {
 		await User.findByIdAndDelete(id);
@@ -95,6 +119,6 @@ export const deleteUser = async (id) => {
 			message: 'Could not delete user',
 			type: 'User-Delete',
 			status: 500,
-		})
+		});
 	}
 };
