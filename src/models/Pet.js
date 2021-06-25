@@ -8,7 +8,7 @@ const petSchema = new Schema({
 	nome: { type: String, required: true },
 	especie: { type: Boolean, required: true },
 	descricao: { type: String, required: true },
-	idade: { type: String, required: true }, //
+	idade: { type: Number, required: true }, //
 	sexo: { type: Boolean, required: true },
 	peso: { type: Number, required: true },
 	castrado: { type: Boolean, required: true },
@@ -19,7 +19,7 @@ const petSchema = new Schema({
 	fiv: { type: Boolean, required: isCat }, //
 	felv: { type: Boolean, required: isCat }, //
 	protetor: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-	foto: { type: String }
+	foto: { type: String },
 	// aqui dizendo que o protetor vai ter como tipo um objectId que por sua vez tem como referência o user
 });
 
