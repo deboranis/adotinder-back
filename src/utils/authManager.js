@@ -2,11 +2,20 @@ import { hash, compare } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import AppError from '../errors/AppError';
 
+/**
+ * @param {string} password a senha do usuário
+ * @returns {string} um hash da senha
+ */
 export const encrypt = async (password) => {
 	const pwd = await hash(password, 10);
 	return pwd;
 };
 
+/**
+ * @param {string} password a senha do usuário
+ * @param {string} hashed o hash do usuário registrado na Db
+ * @returns {boolean} um booleano representando sucesso ou fracasso
+ */
 export const verify = async (password, hashed) => {
 	try {
 		const validated = await compare(password, hashed);
@@ -16,6 +25,10 @@ export const verify = async (password, hashed) => {
 	}
 };
 
+/**
+ * @param {string} id O ID do usuário na Db
+ * @returns {string} um JWT com o ID do usuário criptografado
+ */
 export const authenticate = (id) => {
 	if (id) {
 		const token = jwt.sign({id},
@@ -31,6 +44,10 @@ export const authenticate = (id) => {
 	});
 };
 
+/**
+ * @param {string} token Um JWT com o ID do usuário criptografado
+ * @returns {object} um objeto que contém o ID do usuário na Db
+ */
 export const validate = (token) => {
 	try {
 		const validated = jwt.verify(token, process.env.TOKEN_SECRET);
