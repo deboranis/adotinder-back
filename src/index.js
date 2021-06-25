@@ -15,7 +15,17 @@ const app = express();
 app.use(helmet()); // helmet protege os headers
 app.use(morgan('tiny')); // preset do log das rotas. morgan faz o log das rotas
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+
+// Configuramos o middleware que parseia os requests em json
+// para receber requests de até 7mb e somente dos tipos listados
+app.use(express.json({
+	limit: '7mb',
+	type: [
+		'application/json',
+		'multipart/form-data',
+		'application/x-www-form-urlencoded',
+	],
+}));
 app.use(cors({ origin: process.env.FRONT_END_URL, credentials: true }));
 // só vai permitir requisições do meu front end e vai permitir cookies
 app.use(cookieParser(process.env.COOKIE_SECRET));
