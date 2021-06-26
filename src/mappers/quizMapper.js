@@ -14,8 +14,8 @@ export default function quizMapper(queries) {
 	const filter = {
 		especie: especie === 'true',
 		idade: idade === 'false' ? { $gte: 12 } : null,
-		socializaCriancas: criancas === 'true',
-		socializaAnimais: animais === 'true',
+		socializaCriancas: criancas === 'true' ? true : criancas === 'false' ? false : null,
+		socializaAnimais: animais === 'true' ? true : animais === 'false' ? false : null,
 		fiv: fiv === 'true' ? true : fiv === 'false' ? false : null,
 		felv: felv === 'true' ? true : felv === 'false' ? false : null,
 	};
@@ -26,5 +26,7 @@ export default function quizMapper(queries) {
 		delete filter.fiv;
 		delete filter.felv;
 	}
+	if (filter.socializaAnimais === null) { delete filter.socializaAnimais; }
+	if (filter.socializaCriancas === null) { delete filter.socializaCriancas; }
 	return filter;
 }

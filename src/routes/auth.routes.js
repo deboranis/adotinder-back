@@ -26,7 +26,12 @@ router.post('/login', validateLogin, async (request, response) => {
 			signed: true,
 			sameSite: 'strict',
 			secure: true,
-		}).status(200).json({ nome: data.nome, email: data.email, tipo: data.tipo });
+		}).status(200).json({
+			nome: data.nome,
+			email: data.email,
+			tipo: data.tipo,
+			id: data.id,
+		});
 	} catch (error) {
 		response.status(401).json(new AppError(error));
 	}
@@ -49,7 +54,6 @@ router.get('/token', async (request, response) => {
 			secure: true,
 		}).status(200).json(user.data);
 	} catch (error) {
-		console.log(error)
 		response.clearCookie('token').status(error.status).json(error);
 	}
 });

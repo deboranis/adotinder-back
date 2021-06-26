@@ -42,6 +42,7 @@ export const login = async (body) => {
 					nome: user.nome,
 					email: user.email,
 					tipo: user.tipo,
+					id: user._id,
 				};
 			}
 		}
@@ -60,7 +61,12 @@ export const login = async (body) => {
 export const verifyToken = async (token) => {
 	try {
 		const validatedToken = validate(token);
-		const user = await User.findById(validatedToken.id, ['email', 'nome', '_id', 'tipo']);
+		const user = await User.findById(validatedToken.id, {
+			email: 1,
+			nome: 1,
+			_id: 1,
+			tipo: 1,
+		});
 		const newToken = authenticate(user._id);
 		return {
 			token: newToken,
@@ -68,6 +74,7 @@ export const verifyToken = async (token) => {
 				email: user.email,
 				tipo: user.tipo,
 				nome: user.nome,
+				id: user._id,
 			},
 		};
 	} catch (error) {
