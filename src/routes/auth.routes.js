@@ -22,9 +22,7 @@ router.post('/login', validateLogin, async (request, response) => {
 		const data = await login(body);
 		response.cookie('token', data.token, {
 			expire: process.env.COOKIE_EXPIRY + Date.now(),
-			httpOnly: true,
 			signed: true,
-			sameSite: 'strict',
 			secure: true,
 		}).status(200).json({
 			nome: data.nome,
@@ -48,9 +46,7 @@ router.get('/token', async (request, response) => {
 		const user = await verifyToken(token);
 		response.cookie('token', user.token, {
 			maxAge: 604800000,
-			httpOnly: true,
 			signed: true,
-			sameSite: 'strict',
 			secure: true,
 		}).status(200).json(user.data);
 	} catch (error) {
